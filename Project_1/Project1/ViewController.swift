@@ -31,6 +31,7 @@ class ViewController: UITableViewController {
         for item in items {
             if item.hasPrefix(nssl) {
                 photosAsString.append(item)
+                print("Hello")
             }
         }
     }
