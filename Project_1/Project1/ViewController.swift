@@ -38,6 +38,7 @@ class ViewController: UITableViewController {
                 photosAsString.append(item)
             }
         }
+        photosAsString.sort()
     }
 
     /// Setup how teh navigation should be displayed.
@@ -55,8 +56,7 @@ extension ViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        let sortedPhotos = photosAsString.sorted()
-        cell.textLabel?.text = sortedPhotos[indexPath.row]
+        cell.textLabel?.text = photosAsString[indexPath.row]
         return cell
     }
 
