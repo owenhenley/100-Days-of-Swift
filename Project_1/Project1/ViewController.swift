@@ -20,6 +20,7 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupFileManager()
+        setupNavigation()
     }
 
     // MARK: - Methods
@@ -37,6 +38,12 @@ class ViewController: UITableViewController {
                 photosAsString.append(item)
             }
         }
+    }
+
+    /// Setup how teh navigation should be displayed.
+    private func setupNavigation() {
+        title = "Storm Viewer"
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
 }
 

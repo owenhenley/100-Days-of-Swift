@@ -20,6 +20,17 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupImage()
+        setupNavigation()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.hidesBarsOnTap = true
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.hidesBarsOnTap = false
     }
 
     // MARK: - Methods
@@ -30,5 +41,11 @@ class DetailViewController: UIViewController {
         if let imageToLoad = selectedImage {
             photoImageView.image = UIImage(named: imageToLoad)
         }
+    }
+
+    /// Setup how nevigation should be displayed.
+    private func setupNavigation() {
+        title = selectedImage
+        navigationItem.largeTitleDisplayMode = .never
     }
 }
