@@ -55,13 +55,16 @@ extension ViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        cell.textLabel?.text = photosAsString[indexPath.row]
+        let sortedPhotos = photosAsString.sorted()
+        cell.textLabel?.text = sortedPhotos[indexPath.row]
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let detailsVc = storyboard?.instantiateViewController(withIdentifier: detailsId) as? DetailViewController {
             detailsVc.selectedImage = photosAsString[indexPath.row]
+            detailsVc.imageIndex = indexPath.row
+            detailsVc.totalImages = photosAsString.count
             navigationController?.pushViewController(detailsVc, animated: true)
         }
     }

@@ -12,6 +12,8 @@ class DetailViewController: UIViewController {
 
     // MARK: - Properties
     var selectedImage: String?
+    var imageIndex: Int?
+    var totalImages: Int?
 
     // MARK: - Outlets
     @IBOutlet var photoImageView: UIImageView!
@@ -45,7 +47,7 @@ class DetailViewController: UIViewController {
 
     /// Setup how nevigation should be displayed.
     private func setupNavigation() {
-        title = selectedImage
+        title = "Photo \((imageIndex ?? 0) + 1) of \(totalImages ?? 0)"
         navigationItem.largeTitleDisplayMode = .never
     }
 }
