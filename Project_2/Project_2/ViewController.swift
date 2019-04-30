@@ -19,12 +19,14 @@ class ViewController: UIViewController {
     private var countries = [String]()
     private var score = 0
     private var correctAnswer = 0
+    private var askedQuestions = 0
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupImages()
         addCountries()
+        updateScore()
     }
 
     // MARK: - Methods
@@ -70,7 +72,13 @@ class ViewController: UIViewController {
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
 
-        title = countries[correctAnswer].uppercased()
+        title = countries[correctAnswer].capitalized
+        updateScore()
+    }
+
+    private func updateScore() {
+        navigationController?.navigationBar.tintColor = .black
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Score: \(score)", style: .plain, target: nil, action: nil)
     }
 
     // MARK: - Actions
@@ -79,19 +87,26 @@ class ViewController: UIViewController {
     /// This will set the current score, and then present an alert showing weather or not your guess was correct.
     /// - Parameter sender: The flag button.
     @IBAction func buttonTapped(_ sender: UIButton) {
+        askedQuestions += 1
         var title: String
 
         if sender.tag == correctAnswer {
             title = "Correct"
             score += 1
         } else {
-            title = "Wrong"
-            score -= 1
+            title = "Wrong! That was the flag of \(countries[sender.tag].capitalized)."
         }
 
-        let alertController = UIAlertController(title: title, message: "Your score is: \(score)", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
-
-        present(alertController, animated: true)
+        if askedQuestions <= 9 {
+            let alertController = UIAlertController(title: title, message: "Your score is: \(score)", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+            present(alertController, animated: true)
+        } else {
+            let alertController = UIAlertController(title: title, message: "Your total score is: \(score). Let's Reset", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Reset", style: .default, handler: askQuestion))
+            askedQuestions = 0
+            score = 0
+            present(alertController, animated: true)
+        }
     }
 }
