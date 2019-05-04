@@ -14,12 +14,17 @@ class ViewController: UIViewController {
     // MARK: - Elements
     private var webView: WKWebView!
     private var progressView: UIProgressView!
+    private var websites = [
+        "google.com",
+        "apple.com",
+        "hackingwithswift.com"
+    ]
 
     // MARK: - LifeCycle
     override func loadView() {
         super.loadView()
         setupWebView()
-        let url = URL(string: "https://www.google.com")!
+        let url = URL(string: "https://" + websites[0])!
         webView.load(URLRequest(url: url))
         webView.allowsBackForwardNavigationGestures = true
     }
@@ -55,15 +60,13 @@ class ViewController: UIViewController {
         let alertController = UIAlertController(title: "Open page...",
                                                 message: nil,
                                                 preferredStyle: .actionSheet)
-        alertController.addAction(UIAlertAction(title: "apple.com",
-                                                style: .default,
-                                                handler: openPage))
-        alertController.addAction(UIAlertAction(title: "hackingwithswift.com",
-                                                style: .default,
-                                                handler: openPage))
-        alertController.addAction(UIAlertAction(title: "google.com",
-                                               style: .default,
-                                               handler: openPage))
+
+        for website in websites {
+            alertController.addAction(UIAlertAction(title: website,
+                                                    style: .default,
+                                                    handler: openPage))
+        }
+
         alertController.addAction(UIAlertAction(title: "Cancel",
                                                 style: .cancel))
 
@@ -87,6 +90,13 @@ class ViewController: UIViewController {
         webView.allowsBackForwardNavigationGestures = true
     }
 
+    /// Set up the web view.
+    private func setupWebView() {
+        webView = WKWebView()
+        webView.navigationDelegate = self
+        view = webView
+    }
+
     /// Add the observers for the progress view.
     private func addObservers() {
         webView.addObserver(self,
@@ -98,13 +108,7 @@ class ViewController: UIViewController {
 
 // MARK: - WKNavigationDelegate
 extension ViewController: WKNavigationDelegate {
-    /// Set up the web view.
-    private func setupWebView() {
-        webView = WKWebView()
-        webView.navigationDelegate = self
-        view = webView
-    }
-
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         title = webView.title
     }
@@ -113,6 +117,20 @@ extension ViewController: WKNavigationDelegate {
         if keyPath == "estimatedProgress" {
             progressView.progress = Float(webView.estimatedProgress)
         }
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let url = navigationAction.request.url
+
+        if let host = url?.host {
+            for website in websites {
+                if host.contains(website) {
+                    decisionHandler(.allow)
+                    return
+                }
+            }
+        }
+        decisionHandler(.cancel)
     }
 }
 
