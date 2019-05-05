@@ -43,6 +43,14 @@ class ViewController: UIViewController {
                                          target: self,
                                          action: #selector(openTapped))
         navigationItem.rightBarButtonItem = openButton
+        let backButton = UIBarButtonItem(title: "<",
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(goBack))
+        let forwardButton = UIBarButtonItem(title: ">",
+                                            style: .plain,
+                                            target: self,
+                                            action: #selector(goForward))
 
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
@@ -51,8 +59,16 @@ class ViewController: UIViewController {
         progressView.sizeToFit()
         let progressButton = UIBarButtonItem(customView: progressView)
 
-        toolbarItems = [progressButton, spacer, refresh]
+        toolbarItems = [progressButton, spacer, backButton, forwardButton, spacer, refresh]
         navigationController?.isToolbarHidden = false
+    }
+
+    @objc private func goBack() {
+        webView.goBack()
+    }
+
+    @objc private func goForward() {
+        webView.goForward()
     }
 
     /// Open the action sheet with a list of addresses.
