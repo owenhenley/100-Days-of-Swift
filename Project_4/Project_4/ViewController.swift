@@ -120,6 +120,12 @@ class ViewController: UIViewController {
                             options: .new,
                             context: nil)
     }
+
+    private func showError(blockedLink: String) {
+        let ac = UIAlertController(title: "Error", message: "Sorry, \(blockedLink) is blocked.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .destructive))
+        present(ac, animated: true)
+    }
 }
 
 // MARK: - WKNavigationDelegate
@@ -147,6 +153,8 @@ extension ViewController: WKNavigationDelegate {
             }
         }
         decisionHandler(.cancel)
+        guard let blockedUrl = url else { return }
+        showError(blockedLink: blockedUrl.absoluteString)
     }
 }
 
