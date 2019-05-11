@@ -22,25 +22,25 @@ class ViewController: UIViewController {
         let label2 = UILabel()
         label2.translatesAutoresizingMaskIntoConstraints = false
         label2.backgroundColor = .cyan
-        label2.text = "are"
+        label2.text = "Are"
         label2.sizeToFit()
 
         let label3 = UILabel()
         label3.translatesAutoresizingMaskIntoConstraints = false
         label3.backgroundColor = .yellow
-        label3.text = "some"
+        label3.text = "Some"
         label3.sizeToFit()
 
         let label4 = UILabel()
         label4.translatesAutoresizingMaskIntoConstraints = false
         label4.backgroundColor = .green
-        label4.text = "awesome"
+        label4.text = "Awesome"
         label4.sizeToFit()
 
         let label5 = UILabel()
         label5.translatesAutoresizingMaskIntoConstraints = false
         label5.backgroundColor = .blue
-        label5.text = "labels"
+        label5.text = "Labels"
         label5.sizeToFit()
 
         view.addSubview(label1)
@@ -62,9 +62,11 @@ class ViewController: UIViewController {
                 views: views))
         }
 
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-[label1]-[label2]-[label3]-[label4]-[label5]",
+        let metrics = ["labelHeight": 88]
+
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[label1(labelHeight@999)]-[label2(label1)]-[label3(labelHeight)]-[label4(label1)]-[label5(label1)]-(>=10)-|",
                                                            options: [],
-                                                           metrics: nil,
+                                                           metrics: metrics,
                                                            views: views))
     }
 }
