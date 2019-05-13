@@ -17,7 +17,14 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
         fetchPetitions()
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(showCredits))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(showFilterAlert))
+        let filterButton = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(showFilterAlert))
+        let clearFilterButton = UIBarButtonItem(title: "Clear Filter", style: .plain, target: self, action: #selector(clearFilter))
+        navigationItem.setRightBarButtonItems([filterButton, clearFilterButton], animated: true)
+    }
+
+    @objc func clearFilter() {
+        filteredPetitions.removeAll()
+        reloadTableView()
     }
 
     @objc func showCredits() {
@@ -63,10 +70,17 @@ class ViewController: UITableViewController {
     }
 
     private func filterPetitions(filter: String) {
-        filteredPetitions = petitions.filter { $0.body.contains(filter) || $0.title.contains(filter) }
-        tableView.reloadData()
+        filteredPetitions = petitions.filter {
+            $0.body.lowercased().contains(filter)
+            || $0.title.lowercased().contains(filter)
+        }
+        reloadTableView()
     }
 
+    private func reloadTableView() {
+        tableView.reloadData()
+        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+    }
 
     private func parse(json:Data) {
         let decoder = JSONDecoder()
