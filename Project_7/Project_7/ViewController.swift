@@ -11,20 +11,62 @@ import UIKit
 class ViewController: UITableViewController {
 
     private var petitions = [Petition]()
+    private var filteredPetitions = [Petition]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchPetitions()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(showCredits))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(showFilterAlert))
+    }
+
+    @objc func showCredits() {
+        let ac = UIAlertController(title: "Credits", message: "This app uses the We the People API, but is neither endorsed nor certified by the White House.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+        present(ac, animated: true)
     }
 
     private func fetchPetitions() {
-        let urlString = "https://www.hackingwithswift.com/samples/petitions-1.json"
+        let urlString: String
+        if navigationController?.tabBarItem.tag == 0 {
+            urlString = "https://www.hackingwithswift.com/samples/petitions-1.json"
+        } else {
+            urlString = "https://www.hackingwithswift.com/samples/petitions-2.json"
+        }
+
         if let url = URL(string: urlString) {
             if let data = try? Data(contentsOf: url) {
                 parse(json: data)
+                return
             }
         }
+        showError()
     }
+
+
+    private func showError() {
+    let ac = UIAlertController(title: "Loading error", message: "There was a problem loading the feed. Please check your connection and try again.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
+
+    @objc func showFilterAlert() {
+        let ac = UIAlertController(title: "Filter Results", message: "Enter a query to filter the results.", preferredStyle: .alert)
+        ac.addTextField()
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        ac.addAction(UIAlertAction(title: "Filter", style: .default) { action in
+            if let query = ac.textFields?.first?.text {
+                self.filterPetitions(filter: query)
+            }
+        })
+        present(ac, animated: true)
+    }
+
+    private func filterPetitions(filter: String) {
+        filteredPetitions = petitions.filter { $0.body.contains(filter) || $0.title.contains(filter) }
+        tableView.reloadData()
+    }
+
 
     private func parse(json:Data) {
         let decoder = JSONDecoder()
@@ -35,15 +77,29 @@ class ViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return petitions.count
+        return filteredPetitions.isEmpty ? petitions.count : filteredPetitions.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        let petition = petitions[indexPath.row]
-        cell.textLabel?.text = petition.title
-        cell.detailTextLabel?.text = petition.body
+
+        if !filteredPetitions.isEmpty {
+            let filteredPetition = filteredPetitions[indexPath.row]
+            cell.textLabel?.text = filteredPetition.title
+            cell.detailTextLabel?.text = filteredPetition.body
+        } else {
+            let petition = petitions[indexPath.row]
+            cell.textLabel?.text = petition.title
+            cell.detailTextLabel?.text = petition.body
+        }
+
         return cell
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = DetailViewController()
+        vc.detailItem = petitions[indexPath.row]
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
