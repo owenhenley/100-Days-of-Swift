@@ -10,17 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var cluesLabel: UILabel!
-    var answersLabel: UILabel!
-    var currentAnswer: UITextField!
-    var scoreLabel: UILabel!
-    var letterButtons = [UIButton]()
+    private var cluesLabel: UILabel!
+    private var answersLabel: UILabel!
+    private var currentAnswer: UITextField!
+    private var scoreLabel: UILabel!
+    private var letterButtons = [UIButton]()
 
-    var activatedButtons = [UIButton]()
-    var solutions = [String]()
-
-    var level = 1
-    var score = 0 {
+    private var activatedButtons = [UIButton]()
+    private var solutions = [String]()
+    private var level = 1
+    private var answersRemaining = 0
+    private var score = 0 {
         didSet {
             scoreLabel.text = "Score: \(score)"
         }
@@ -118,6 +118,8 @@ class ViewController: UIViewController {
                 let letterButton = UIButton(type: .system)
                 letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
                 letterButton.setTitle("ZZZ", for: .normal)
+                letterButton.layer.borderWidth = 1
+                letterButton.layer.borderColor = UIColor.lightGray.cgColor
                 letterButton.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
 
                 let frame = CGRect(x: column * width, y: row * height, width: width, height: height)
@@ -158,12 +160,25 @@ class ViewController: UIViewController {
 
             currentAnswer.text = ""
             score += 1
+            answersRemaining -= 1
 
-            if score.isMultiple(of: 7) {
+            if answersRemaining == 0 {
                 let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Let's Go!", style: .default, handler: levelUp))
                 present(ac, animated: true)
             }
+        } else {
+            let ac = UIAlertController(title: "Oops", message: "Thats not right! Please try again.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default) { (action) in
+                for button in self.activatedButtons {
+                    button.isHidden = false
+                }
+                self.currentAnswer.text = ""
+                self.activatedButtons.removeAll()
+            })
+
+            present(ac, animated: true)
+            score -= 1
         }
     }
 
@@ -212,6 +227,7 @@ class ViewController: UIViewController {
                     letterBits += bits
                 }
             }
+            answersRemaining = solutions.count
         }
         cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
         answersLabel.text = solutionsString.trimmingCharacters(in: .whitespacesAndNewlines)
