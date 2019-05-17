@@ -206,37 +206,45 @@ class ViewController: UIViewController {
         var clueString = ""
         var solutionsString = ""
         var letterBits = [String]()
+        let level = "level\(self.level)"
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            if let levelFileURL = Bundle.main.url(forResource: level, withExtension: "txt") {
+                if let levelContents = try? String(contentsOf: levelFileURL) {
+                    var lines = levelContents.components(separatedBy: "\n")
+                    lines.shuffle()
 
-        if let levelFileURL = Bundle.main.url(forResource: "level\(level)", withExtension: "txt") {
-            if let levelContents = try? String(contentsOf: levelFileURL) {
-                var lines = levelContents.components(separatedBy: "\n")
-                lines.shuffle()
+                    for (index, line) in lines.enumerated() {
+                        let parts = line.components(separatedBy: ": ")
+                        let answer = parts[0]
+                        let clue = parts[1]
 
-                for (index, line) in lines.enumerated() {
-                    let parts = line.components(separatedBy: ": ")
-                    let answer = parts[0]
-                    let clue = parts[1]
+                        clueString += "\(index + 1). \(clue)\n"
 
-                    clueString += "\(index + 1). \(clue)\n"
+                        let solutionWord = answer.replacingOccurrences(of: "|", with: "")
+                        solutionsString += "\(solutionWord.count) letters\n"
+                        self?.solutions.append(solutionWord)
 
-                    let solutionWord = answer.replacingOccurrences(of: "|", with: "")
-                    solutionsString += "\(solutionWord.count) letters\n"
-                    solutions.append(solutionWord)
-
-                    let bits = answer.components(separatedBy: "|")
-                    letterBits += bits
+                        let bits = answer.components(separatedBy: "|")
+                        letterBits += bits
+                    }
+                }
+                if let solutionsCount = self?.solutions.count {
+                    self?.answersRemaining = solutionsCount
                 }
             }
-            answersRemaining = solutions.count
-        }
-        cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
-        answersLabel.text = solutionsString.trimmingCharacters(in: .whitespacesAndNewlines)
+            DispatchQueue.main.async { [weak self] in
+                self?.cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
+                self?.answersLabel.text = solutionsString.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        letterButtons.shuffle()
+                self?.letterButtons.shuffle()
 
-        if letterButtons.count == letterBits.count {
-            for button in 0..<letterButtons.count {
-                letterButtons[button].setTitle(letterBits[button], for: .normal)
+                if let letterButtonCount = self?.letterButtons.count {
+                    if letterButtonCount == letterBits.count {
+                        for button in 0..<letterButtonCount {
+                            self?.letterButtons[button].setTitle(letterBits[button], for: .normal)
+                        }
+                    }
+                }
             }
         }
     }
