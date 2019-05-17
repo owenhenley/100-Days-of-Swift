@@ -11,7 +11,6 @@ import UIKit
 class ViewController: UITableViewController {
 
     // MARK: - Properties
-    private let nssl = "nssl"
     private let cellId = "tableViewCell"
     private let detailsId = "Details"
     private var photosAsString = [String]()
@@ -29,16 +28,22 @@ class ViewController: UITableViewController {
     /// This is used to setup the file manager to access the images saved to our
     /// Bundle resource path.
     private func setupFileManager() {
-        let manager = FileManager.default
-        let path = Bundle.main.resourcePath! // iOS NEEDS a resourcepath, so we can force it. Pulling from project navigator, *not* assets.
-        let items = try! manager.contentsOfDirectory(atPath: path) // If we cant read the app bundle, teh app wont work anyway, so we can force try
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            let manager = FileManager.default
+            let path = Bundle.main.resourcePath! // iOS NEEDS a resourcepath, so we can force it. Pulling from project navigator, *not* assets.
+            let items = try! manager.contentsOfDirectory(atPath: path) // If we cant read the app bundle, teh app wont work anyway, so we can force try
 
-        for item in items {
-            if item.hasPrefix(nssl) {
-                photosAsString.append(item)
+            for item in items {
+                if item.hasPrefix("nssl") {
+                    self?.photosAsString.append(item)
+                }
+            }
+
+            self?.photosAsString.sort()
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
             }
         }
-        photosAsString.sort()
     }
 
     /// Setup how teh navigation should be displayed.
