@@ -74,15 +74,18 @@ class ViewController: UITableViewController {
     }
 
     private func filterPetitions(filter: String) {
-        filteredPetitions = petitions.filter {
-            $0.body.lowercased().contains(filter) || $0.title.lowercased().contains(filter)
+        let filteredPetitions = petitions.filter { $0.body.lowercased().contains(filter) || $0.title.lowercased().contains(filter) }
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            self?.filteredPetitions = filteredPetitions
+            self?.reloadTableView()
         }
-        reloadTableView()
     }
 
     private func reloadTableView() {
-        tableView.reloadData()
-        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+            self?.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        }
     }
 
     private func parse(json:Data) {
