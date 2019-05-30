@@ -19,6 +19,14 @@ class ViewController: UICollectionViewController {
 
     @objc private func addNewPerson() {
         let picker = UIImagePickerController()
+
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            picker.sourceType = .camera
+            print("Using camera")
+        } else {
+            print("Opening Library")
+        }
+
         picker.allowsEditing = true
         picker.delegate = self
         present(picker, animated: true)
@@ -53,6 +61,21 @@ class ViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let person = people[indexPath.item]
+
+        let ac = UIAlertController(title: "Rename or delete?", message: "Would you like to rename, or delete this image?", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        ac.addAction(UIAlertAction(title: "Rename", style: .default, handler: { _ in
+            self.rename(person: person)
+        }))
+        ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
+            self.people.remove(at: indexPath.row)
+            self.collectionView.reloadData()
+        }))
+
+        present(ac, animated: true)
+    }
+
+    private func rename(person: Person) {
         let ac = UIAlertController(title: "Rename person", message: nil, preferredStyle: .alert)
         ac.addTextField()
 
@@ -64,7 +87,6 @@ class ViewController: UICollectionViewController {
             person.name = newName
             self?.collectionView.reloadData()
         })
-
         present(ac, animated: true)
     }
 }
