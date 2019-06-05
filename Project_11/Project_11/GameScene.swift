@@ -85,7 +85,7 @@ class GameScene: SKScene {
                 box.physicsBody?.isDynamic = false
                 addChild(box)
             } else {
-                let ball = SKSpriteNode(imageNamed: "ballRed")
+                let ball = randomBall()
                 ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2)
                 ball.physicsBody?.restitution = 0.5
                 ball.physicsBody?.contactTestBitMask = ball.physicsBody?.collisionBitMask ?? 0
@@ -98,6 +98,10 @@ class GameScene: SKScene {
     }
 
     // MARK: - Private Methods
+
+    private func randomBall() -> SKSpriteNode {
+        SKSpriteNode(imageNamed: Ball.all.randomElement() ?? "ballRed")
+    }
 
     private func makeBoucer(at position: CGPoint) {
         let bouncer = SKSpriteNode(imageNamed: "bouncer")
@@ -168,4 +172,15 @@ extension GameScene: SKPhysicsContactDelegate {
             collison(between: nodeB, object: nodeA)
         }
     }
+}
+
+enum Ball {
+    static let red = "ballRed"
+    static let blue = "ballBlue"
+    static let cyan = "ballCyan"
+    static let green = "ballGreen"
+    static let grey = "ballGrey"
+    static let purple = "ballPurple"
+    static let yellow = "ballYellow"
+    static let all = [red, blue, cyan, green, grey, purple, yellow]
 }
