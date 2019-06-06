@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E3C98A522A98D3F0012A69A /* Balls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3C98A422A98D3F0012A69A /* Balls.swift */; };
+		3E3C98A722A98FA90012A69A /* MagicParticles.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3E3C98A622A98FA80012A69A /* MagicParticles.sks */; };
 		3E73D20722A7D7F00054CB65 /* FireParticles.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3E73D20622A7D7F00054CB65 /* FireParticles.sks */; };
 		3EC5A11222A55F84001E663F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC5A11122A55F84001E663F /* AppDelegate.swift */; };
 		3EC5A11422A55F84001E663F /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3EC5A11322A55F84001E663F /* GameScene.sks */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3E3C98A422A98D3F0012A69A /* Balls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Balls.swift; sourceTree = "<group>"; };
+		3E3C98A622A98FA80012A69A /* MagicParticles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MagicParticles.sks; sourceTree = "<group>"; };
 		3E73D20622A7D7F00054CB65 /* FireParticles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = FireParticles.sks; path = "../../HackingWithSwift-files/project11-files/Content/FireParticles.sks"; sourceTree = "<group>"; };
 		3EC5A10E22A55F84001E663F /* Project_11.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Project_11.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC5A11122A55F84001E663F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -63,10 +67,12 @@
 				3EC5A11122A55F84001E663F /* AppDelegate.swift */,
 				3EC5A11322A55F84001E663F /* GameScene.sks */,
 				3EC5A11722A55F84001E663F /* GameScene.swift */,
+				3E3C98A422A98D3F0012A69A /* Balls.swift */,
 				3EC5A11922A55F84001E663F /* GameViewController.swift */,
 				3EC5A11B22A55F84001E663F /* Main.storyboard */,
 				3EC5A11E22A55F86001E663F /* Assets.xcassets */,
 				3E73D20622A7D7F00054CB65 /* FireParticles.sks */,
+				3E3C98A622A98FA80012A69A /* MagicParticles.sks */,
 				3EC5A12022A55F86001E663F /* LaunchScreen.storyboard */,
 				3EC5A12322A55F86001E663F /* Info.plist */,
 			);
@@ -134,6 +140,7 @@
 				3EC5A11D22A55F84001E663F /* Main.storyboard in Resources */,
 				3EC5A11422A55F84001E663F /* GameScene.sks in Resources */,
 				3E73D20722A7D7F00054CB65 /* FireParticles.sks in Resources */,
+				3E3C98A722A98FA90012A69A /* MagicParticles.sks in Resources */,
 				3EC5A11F22A55F86001E663F /* Assets.xcassets in Resources */,
 				3EC5A12222A55F86001E663F /* LaunchScreen.storyboard in Resources */,
 			);
@@ -146,6 +153,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E3C98A522A98D3F0012A69A /* Balls.swift in Sources */,
 				3EC5A11822A55F84001E663F /* GameScene.swift in Sources */,
 				3EC5A11A22A55F84001E663F /* GameViewController.swift in Sources */,
 				3EC5A11222A55F84001E663F /* AppDelegate.swift in Sources */,
