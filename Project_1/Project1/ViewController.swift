@@ -9,20 +9,26 @@
 import UIKit
 
 class ViewController: UITableViewController {
+    private let defaults = UserDefaults.standard
 
     // MARK: - Properties
+
     private let cellId = "tableViewCell"
     private let detailsId = "Details"
     private var photosAsString = [String]()
+    private var viewCount = [String: Int]()
 
     // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupFileManager()
         setupNavigation()
+        load()
     }
 
     // MARK: - Methods
+
     /// Setup the file manager.
     ///
     /// This is used to setup the file manager to access the images saved to our
@@ -46,14 +52,23 @@ class ViewController: UITableViewController {
         }
     }
 
-    /// Setup how teh navigation should be displayed.
+    /// Setup how the navigation should be displayed.
     private func setupNavigation() {
         title = "Storm Viewer"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
+
+    private func load() {
+        viewCount = defaults.object(forKey: "viewCount") as? [String: Int] ?? [String: Int]()
+    }
+
+    private func save() {
+        defaults.set(viewCount, forKey: "viewCount")
+    }
 }
 
 // MARK: - Setup table view
+
 extension ViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photosAsString.count
@@ -62,6 +77,7 @@ extension ViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         cell.textLabel?.text = photosAsString[indexPath.row]
+        cell.detailTextLabel?.text = "\(viewCount[photosAsString[indexPath.row], default: 0]) views"
         return cell
     }
 
@@ -70,7 +86,10 @@ extension ViewController {
             detailsVc.selectedImage = photosAsString[indexPath.row]
             detailsVc.imageIndex = indexPath.row
             detailsVc.totalImages = photosAsString.count
+            viewCount[photosAsString[indexPath.row], default: 0] += 1
+            save()
             navigationController?.pushViewController(detailsVc, animated: true)
         }
+        tableView.reloadData()
     }
 }
