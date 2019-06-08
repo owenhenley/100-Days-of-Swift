@@ -11,9 +11,11 @@ import UIKit
 class ViewController: UICollectionViewController {
 
     var people = [Person]()
+    let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        load()
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
     }
 
@@ -66,9 +68,11 @@ class ViewController: UICollectionViewController {
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         ac.addAction(UIAlertAction(title: "Rename", style: .default, handler: { _ in
             self.rename(person: person)
+            self.save()
         }))
         ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             self.people.remove(at: indexPath.row)
+            self.save()
             self.collectionView.reloadData()
         }))
 
@@ -89,6 +93,27 @@ class ViewController: UICollectionViewController {
         })
         present(ac, animated: true)
     }
+
+    private func load() {
+        if let savedPeople = defaults.object(forKey: "people") as? Data {
+            let jsonDecoder = JSONDecoder()
+            do {
+                people = try jsonDecoder.decode([Person].self, from: savedPeople)
+            } catch {
+                print("Error: \(#file), \(#function), \(#line), Message: \(error). \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func save() {
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(people) {
+            defaults.set(savedData, forKey: "people")
+        } else {
+            print("Failed to save people")
+        }
+    }
+
 }
 
 extension ViewController: UIImagePickerControllerDelegate {
@@ -105,6 +130,7 @@ extension ViewController: UIImagePickerControllerDelegate {
 
         let person = Person(name: "Unknown", image: imageName)
         people.append(person)
+        save()
         collectionView.reloadData()
 
         dismiss(animated: true)
