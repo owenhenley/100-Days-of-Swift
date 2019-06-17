@@ -59,12 +59,10 @@
 			isa = PBXGroup;
 			children = (
 				3EC50B3A22B4D26E004C9401 /* AppDelegate.swift */,
-				3EC50B3E22B4D26E004C9401 /* Main.storyboard */,
 				3EC50B5122B4D53E004C9401 /* ViewController */,
 				3EC50B5022B4D52A004C9401 /* Model */,
 				3EC50B5222B4D553004C9401 /* View */,
 				3EC50B4122B4D270004C9401 /* Assets.xcassets */,
-				3EC50B4322B4D270004C9401 /* LaunchScreen.storyboard */,
 				3EC50B4622B4D270004C9401 /* Info.plist */,
 			);
 			path = Milestone_5;
@@ -89,6 +87,8 @@
 		3EC50B5222B4D553004C9401 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				3EC50B4322B4D270004C9401 /* LaunchScreen.storyboard */,
+				3EC50B3E22B4D26E004C9401 /* Main.storyboard */,
 				3EC50B4C22B4D347004C9401 /* TableViewCell.swift */,
 			);
 			path = View;
