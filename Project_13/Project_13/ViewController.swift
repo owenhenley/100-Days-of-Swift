@@ -113,6 +113,8 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         let beginImage = CIImage(image: currentImage)
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
 
+        title = currentFilter.name
+
         applyProcessing()
     }
 
