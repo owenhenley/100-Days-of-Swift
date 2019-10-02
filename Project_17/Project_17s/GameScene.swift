@@ -74,6 +74,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.position = location
     }
     
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+
+    }
+    
     @objc
     private func createEnemy() {
         guard let enemy = possibleEnemies.randomElement() else { return }
